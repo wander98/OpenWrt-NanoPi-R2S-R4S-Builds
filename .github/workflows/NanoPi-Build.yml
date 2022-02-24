@@ -48,7 +48,7 @@ jobs:
     needs: init
     strategy:
       matrix:
-        nanopi_model: [R2S, R4S]
+        nanopi_model: [R4S]
     
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
@@ -187,8 +187,8 @@ jobs:
 #        echo "OPENWRT_BRANCH=${{ github.event.inputs.openwrt_branch }}" >> $GITHUB_ENV
 #        echo "NANOPI_MODEL=${{ github.event.inputs.nanopi_model }}" >> $GITHUB_ENV
     
-    - name: Load AO seed (mini)
-      run: ./openwrt-$OPENWRT_BRANCH/steps/06-create_config_from_seed.sh $NANOPI_MODEL mini
+#    - name: Load AO seed (mini)
+#      run: ./openwrt-$OPENWRT_BRANCH/steps/06-create_config_from_seed.sh $NANOPI_MODEL mini
 
 #    - name: Download package
 #      run: |
@@ -198,13 +198,13 @@ jobs:
 #        find dl -size -1024c -exec ls -l {} \;
 #        find dl -size -1024c -exec rm -f {} \;
 
-    - name: Compile OpenWRT (mini)
-      id: compileopenwrtmini
-      continue-on-error: true
-      run: |
-        cd build/openwrt
-        let make_process=$(nproc)+1
-        make -j${make_process} || make -j${make_process}
+#    - name: Compile OpenWRT (mini)
+#      id: compileopenwrtmini
+#      continue-on-error: true
+#      run: |
+#        cd build/openwrt
+#        let make_process=$(nproc)+1
+#        make -j${make_process} || make -j${make_process}
     
     - name: If compile openwrt Error
       if: steps.compileopenwrtmini.outcome == 'failure'
@@ -213,9 +213,9 @@ jobs:
         echo '================================================================'
         cd build/openwrt && make -j1 V=s
     
-    - name: Organize files (mini)
-      id: organizemini
-      run: ./openwrt-$OPENWRT_BRANCH/steps/organize_files.sh $NANOPI_MODEL mini $OPENWRT_BRANCH $RELTAG
+#    - name: Organize files (mini)
+#      id: organizemini
+#      run: ./openwrt-$OPENWRT_BRANCH/steps/organize_files.sh $NANOPI_MODEL mini $OPENWRT_BRANCH $RELTAG
     
     - name: Load AO seed (full)
       run: ./openwrt-$OPENWRT_BRANCH/steps/06-create_config_from_seed.sh $NANOPI_MODEL full
